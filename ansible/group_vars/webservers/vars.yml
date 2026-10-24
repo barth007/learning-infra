@@ -1,0 +1,2 @@
+survey_builder_port: 3001
+survey_builder_database_url: "postgresql://{{ survey_builder_postgres_user }}:{{ survey_builder_postgres_password }}@db:5432/{{ survey_builder_postgres_db }}"

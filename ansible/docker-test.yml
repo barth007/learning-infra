@@ -1,0 +1,6 @@
+- name: configure Docker on the test server
+  hosts: test_servers
+  become: true
+
+  roles:
+    - docker

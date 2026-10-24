@@ -1,0 +1,11 @@
+- name: Deploy Survey Builder to test server
+  hosts: test_servers
+  become: true
+
+  roles:
+    - role: docker
+      tags:
+        - docker
+    - role: survey_builder
+      tags:
+        - survey_builder

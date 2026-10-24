@@ -1,0 +1,5 @@
+docker_gpg_url: https://download.docker.com/linux/ubuntu/gpg
+docker_keyrings_dir: /etc/apt/keyrings
+docker_app_dir: /home/ubuntu/survey-builder
+docker_branch: main
+docker_git_repo_url: 'https://github.com/barth007/Open-Survey-Builder.git'

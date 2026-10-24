@@ -1,0 +1,19 @@
+---
+survey_builder_app_dir: /home/ubuntu/survey-builder-test
+survey_builder_git_repo_url: 'https://github.com/barth007/Open-Survey-Builder.git'
+survey_builder_branch: main
+
+survey_builder_port: 3001
+survey_builder_frontend_url: 'http://3.72.78.212'
+
+survey_builder_postgres_user: survey_test
+survey_builder_postgres_db: survey_test_db
+
+survey_builder_redis_url: 'redis://redis:6379'
+
+survey_builder_smtp_host: localhost
+survey_builder_smtp_port: '1025'
+survey_builder_smtp_secure: 'false'
+survey_builder_smtp_user: ''
+survey_builder_smtp_from: 'test@example.invalid'
+survey_builder_database_url: "postgresql://{{ survey_builder_postgres_user }}:{{ survey_builder_postgres_password }}@db:5432/{{ survey_builder_postgres_db }}"

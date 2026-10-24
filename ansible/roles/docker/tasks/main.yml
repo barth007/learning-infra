@@ -1,0 +1,69 @@
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install prerequisites
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+    state: present
+
+- name: Create Docker keyrings directory
+  ansible.builtin.file:
+    path: " {{ docker_keyrings_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Download Docker GPG key
+  ansible.builtin.get_url:
+    url: "{{ docker_gpg_url }}"
+    dest: "{{ docker_keyrings_dir }}/docker.asc }}"
+    mode: '0644'
+
+- name: Add Docker repository
+  ansible.builtin.deb822_repository:
+    name: docker
+    types: deb
+    uris: https://download.docker.com/linux/ubuntu
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: stable
+    architectures: amd64
+    signed_by: "{{ docker_gpg_url }}"
+    state: present
+
+
+- name: Update apt cache after adding Docker repository
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install Docker
+  ansible.builtin.apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
+    state: present
+
+- name: Ensure Docker service is running
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Add deploy user to the docker group
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: true
+
+- name: Check if docker is installed
+  ansible.builtin.command: docker --version
+  register: docker_installed
+  changed_when: false
+  failed_when: docker_installed.rc != 0
+
+- name: Show Docker version
+  ansible.builtin.debug:
+    msg: "Docker is installed: {{ docker_installed.stdout }}"

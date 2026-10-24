@@ -1,0 +1,14 @@
+# - name: Provision Survey Builder Infrastructure
+#   hosts: webservers
+#   become: true
+- name: Provision Survey Builder Application
+  hosts: webservers
+  become: true
+
+  roles:
+    - role: docker
+      tags:
+        - docker
+    - role: survey_builder
+      tags:
+        - survey_builder

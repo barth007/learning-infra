@@ -1,0 +1,31 @@
+- name: Create application directory
+  ansible.builtin.file:
+    path: "{{ survey_builder_app_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Clone Survey Builder repository
+  ansible.builtin.git:
+    repo: "{{ survey_builder_git_repo_url }}"
+    dest: "{{ survey_builder_app_dir }}"
+    version: "{{ survey_builder_branch }}"
+    update: true
+  become_user: "{{ ansible_user }}"
+  become: true
+
+- name: Create application .env file
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ survey_builder_app_dir }}/.env"   # or the env_file path from Step 1
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0600'
+
+
+- name: Build and start application
+  community.docker.docker_compose_v2:
+    project_src: "{{ survey_builder_app_dir }}"
+    build: always
+    state: present

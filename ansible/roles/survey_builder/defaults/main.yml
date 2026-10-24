@@ -1,0 +1,4 @@
+survey_builder_app_dir: /home/ubuntu/survey-builder
+survey_builder_git_repo_url: 'https://github.com/barth007/Open-Survey-Builder.git'
+survey_builder_branch: main
+
