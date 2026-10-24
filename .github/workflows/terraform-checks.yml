@@ -1,4 +1,5 @@
-name: Terraform Checks
+---
+name: Infrastructure Checks
 
 on:
   push:
@@ -18,20 +19,45 @@ jobs:
     defaults:
       run:
         working-directory: terraform
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Set Up Terraform
         uses: hashicorp/setup-terraform@v3
 
       - name: Initialize Terraform
         run: terraform fmt -check -recursive
-      
+
       - name: Initialize Terraform
         run: terraform init -backend=false -input=false
-      
+
       - name: Validate Terraform configuration
         run: terraform validate
-    
+
+  ansible-checks:
+    name: Validate Ansible
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ansible
+
+    steps:
+      - name: Checkout respository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install Ansible
+        run: python -m pip install ansible-core
+
+      - name: Check production playbook syntax
+        run: ansible-playbook --syntax-check -i 'localhost,' site.yml
+
+      - name: Check tes playbook syntax
+        run: ansible-playbook --syntax-check -i 'localhost,' survey-builder-test.yml
